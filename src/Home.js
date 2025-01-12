@@ -9,7 +9,7 @@ function Home() {
             </div>
             <div className='input-output'>
                 <div className='input-container'>
-                    <textarea className='input-field' placeholder='Start your text here...' type='text'></textarea>
+                    <textarea className='input-field' placeholder='Start your text here...' type='text' spellCheck='false'></textarea>
                 </div>
                 <div className='output-container'>
                     <div>
