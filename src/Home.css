@@ -36,3 +36,7 @@
 .input-field:focus-visible {
     border: 1px solid #8c8a2c;
 }
+
+.output-title {
+    font-size: 24px;
+}
