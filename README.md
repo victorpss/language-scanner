@@ -22,6 +22,6 @@ SO COOL! Wanna try? Follow me!
 - Important: start the local server with `python -m uvicorn src.server:app --host 0.0.0.0 --port 8000 --reload`
 - Please wait for the model download process. It will take up to 10 seconds. I promise.
 
-Have fun!
+Have fun! Remember: the more you write, the more accurate the model becomes.
 
 Did you find any problem? Contact me at discord: `vitaoooooooo` or telegram `@victorpssantos`
