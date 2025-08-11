@@ -12,11 +12,16 @@ load_dotenv()
 MODEL_PATH = "./notebook/language_detection_model.pkl"
 GOOGLE_DRIVE_ID = "1z4fQnZVXC4CxfWF-kc-fGX_sD29oi4UF"
 
+ALLOWED = [o.strip() for o in os.getenv(
+    "ALLOW_ORIGINS",
+    "http://localhost:3000,http://localhost:5173,https://language-scanner.vercel.app"
+).split(",")]
+
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  
+    allow_origins=ALLOWED,  
     allow_credentials=True,
     allow_methods=["*"],  
     allow_headers=["*"],  
@@ -40,9 +45,9 @@ def load_model_on_startup():
     global model
     try:
         model = ensure_model()
-        # sanity check
-        _ = getattr(model, "predict_proba", None)
-        _ = getattr(model, "classes_", None)
+        # sanity checks
+        assert hasattr(model, "predict_proba")
+        assert hasattr(model, "classes_")
         print("Model loaded successfully.")
     except Exception as e:
         print(f"Error loading model: {e}")
