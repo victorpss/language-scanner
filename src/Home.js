@@ -4,7 +4,7 @@ import "./Home.css";
 function getApiBase() {
   // Priority: Next.js (Vercel) -> Vite -> CRA -> local fallback
   const fromEnv =
-    process.env.PUBLIC_API_URL ||
+    process.env.NEXT_PUBLIC_API_URL ||
     (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.VITE_API_URL) ||
     process.env.REACT_APP_API_URL;
   return (fromEnv || "http://localhost:8000").replace(/\/+$/, ""); // remove slashes at the end
