@@ -1,6 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import "./Home.css";
 
+function getApiBase() {
+  // Priority: Next.js (Vercel) -> Vite -> CRA -> local fallback
+  const fromEnv =
+    process.env.PUBLIC_API_URL ||
+    (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.VITE_API_URL) ||
+    process.env.REACT_APP_API_URL;
+  return (fromEnv || "http://localhost:8000").replace(/\/+$/, ""); // remove slashes at the end
+}
+
+const API_BASE = getApiBase();
+const PREDICT_URL = `${API_BASE}/predict`;
+
 function Home() {
     const [currentText, setCurrentText] = useState("");
     const [predictions, setPrediction] = useState([]);
@@ -9,7 +21,7 @@ function Home() {
     const [loadingText, setLoadingText] = useState("Scanning.");
     const [controller, setController] = useState(null);
     
-    // Mudando o texto de Scanning enquanto a requisição é feita
+    // Scanning... animation while doing request
     useEffect(() => {
         if (!isLoading) return;
 
@@ -24,7 +36,7 @@ function Home() {
         return () => clearInterval(interval);
     }, [isLoading]);
 
-    // Mudando o updatedText 200ms depois do usuário parar de digitar
+    // updatedText changes 200ms after user stops typing
     useEffect(() => {
         if (currentText.trim() !== "") {
             setIsLoading(true);
@@ -37,7 +49,7 @@ function Home() {
         return () => clearTimeout(handler); 
     }, [currentText]);
 
-    // Fazendo a requisição após o updatedText mudar
+    // doing request after updatedText changed
     useEffect(() => {
         if (updatedText.trim() === "") {
             setPrediction([]);
@@ -45,7 +57,7 @@ function Home() {
             return;
         }
 
-        // Se houver uma requisição em andamento, cancela antes de iniciar outra
+        // if there is request pending, cancel before making another one
         if (controller) {
             controller.abort();
         }
@@ -57,7 +69,7 @@ function Home() {
             setIsLoading(true);
 
             try {
-                const response = await fetch("http://localhost:8000/predict/", {
+                const response = await fetch(PREDICT_URL, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
@@ -67,19 +79,19 @@ function Home() {
                 });
 
                 if (!response.ok) {
-                    throw new Error("Erro ao obter a previsão");
+                    throw new Error(`Error getting language prediction. Status ${response.status}`);
                 }
 
                 const data = await response.json();
                 setPrediction(data.predictions);
                 setIsLoading(false);
             } catch (error) {
-                console.error("Erro:", error);
+                console.error("Error: ", error);
             }
         };
 
         fetchPrediction();
-    }, [updatedText]);
+    }, [updatedText, controller]);
 
     return (
         <div className='home-container'>
