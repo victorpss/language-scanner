@@ -1,6 +1,6 @@
 # Language Scanner
 
-Welcome the language scanner project - it uses machine learning models to predict the language of YOUR text!
+Welcome to the language scanner project - it uses machine learning models to predict the language of YOUR text!
 
 ![Alt Text](scanner.gif)
 
