@@ -18,6 +18,7 @@ const PREDICT_URL = `${API_BASE}/predict`;
 
 console.log("API BASE: ", API_BASE);
 console.log("PREDICT URL: ", PREDICT_URL);
+console.log("NEXT_PUBLIC_API_URL:", process.env.NEXT_PUBLIC_API_URL);
 
 function Home() {
   const [currentText, setCurrentText] = useState("");
