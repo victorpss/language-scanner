@@ -2,18 +2,22 @@ import React, { useEffect, useState } from "react";
 import "./Home.css";
 
 function getApiBase() {
-  // Priority: Next.js (Vercel) -> Vite -> CRA -> local fallback
-  const fromEnv =
-    process.env.NEXT_PUBLIC_API_URL ||
-    (typeof import.meta !== "undefined" &&
-      import.meta.env &&
-      import.meta.env.VITE_API_URL) ||
-    process.env.REACT_APP_API_URL;
-  return (fromEnv || "http://localhost:8000").replace(/\/+$/, ""); // remove slashes at the end
+    // Priority: Next.js (Vercel) -> Vite -> CRA -> local fallback
+    const fromEnv =
+        (typeof window !== "undefined" && window.NEXT_PUBLIC_API_URL) ||
+        process.env.NEXT_PUBLIC_API_URL ||
+        (typeof import.meta !== "undefined" &&
+            import.meta.env &&
+            import.meta.env.VITE_API_URL) ||
+        process.env.REACT_APP_API_URL;
+    return (fromEnv || "http://localhost:8000").replace(/\/+$/, ""); // remove slashes at the end
 }
 
 const API_BASE = getApiBase();
 const PREDICT_URL = `${API_BASE}/predict`;
+
+console.log("API BASE: ", API_BASE);
+console.log("PREDICT URL: ", PREDICT_URL);
 
 function Home() {
   const [currentText, setCurrentText] = useState("");
