@@ -79,6 +79,7 @@ def predict_dry(input_data: TextInput):
     return {"ok": True, "len": len(input_data.text)}
 
 @app.post("/predict")
+@app.post("/predict/")
 def predict_language(input_data: TextInput):
     if model is None:
         raise HTTPException(status_code=503, detail="Model not loaded yet")
@@ -88,12 +89,14 @@ def predict_language(input_data: TextInput):
         raise HTTPException(status_code=400, detail="Texto vazio")
 
     try:
-        with threadpool_limits(limits=1):
-            probs = model.predict_proba([text])[0]
-        labels = [str(x) for x in model.classes_]
+        print("predict: calling predict_proba...")
+        probs = model.predict_proba([text])[0]
+        print("predict: predict_proba done.")
+
+        labels = [str(x) for x in getattr(model, "classes_", [])]
         idx = np.argsort(probs)[::-1][:5]
         top5 = [[labels[i], round(float(probs[i]) * 100, 2)] for i in idx]
-        return JSONResponse(content={"predictions": top5})
+        return {"predictions": top5}
     except Exception as e:
-        logger.exception("Predict failed")
+        import traceback; traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Inference failed: {e}")
