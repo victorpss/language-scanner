@@ -89,9 +89,7 @@ def predict_language(input_data: TextInput):
         raise HTTPException(status_code=400, detail="Texto vazio")
 
     try:
-        print("predict: calling predict_proba...")
         probs = model.predict_proba([text])[0]
-        print("predict: predict_proba done.")
 
         labels = [str(x) for x in getattr(model, "classes_", [])]
         idx = np.argsort(probs)[::-1][:5]
