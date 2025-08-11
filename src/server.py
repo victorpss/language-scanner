@@ -35,7 +35,7 @@ def ensure_model():
         gdown.download(url, MODEL_PATH, quiet=False)
     return joblib.load(MODEL_PATH)
 
-@app.lifespan("startup")
+@app.on_event("startup")
 def load_model_on_startup():
     global model
     try:
