@@ -74,6 +74,10 @@ def model_info():
         raise HTTPException(status_code=503, detail="Model not loaded")
     return {"classes": [str(c) for c in list(getattr(model, "classes_", []))]}
 
+@app.post("/predict-dry")
+def predict_dry(input_data: TextInput):
+    return {"ok": True, "len": len(input_data.text)}
+
 @app.post("/predict")
 def predict_language(input_data: TextInput):
     if model is None:
