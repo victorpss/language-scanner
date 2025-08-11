@@ -5,9 +5,11 @@ from dotenv import load_dotenv
 import joblib
 import os
 import gdown
+import logging
 import numpy as np
 
 load_dotenv()
+logger = logging.getLogger("uvicorn.error")
 
 MODEL_PATH = "./notebook/language_detection_model.pkl"
 GOOGLE_DRIVE_ID = "1z4fQnZVXC4CxfWF-kc-fGX_sD29oi4UF"
@@ -74,6 +76,7 @@ def predict_language(input_data: TextInput):
         probabilities = model.predict_proba([text])[0] 
         language_labels = model.classes_
     except Exception as e:
+        logger.exception("Predict failed")
         raise HTTPException(status_code=500, detail=f"Inference failed: {e}")
 
     top_5_indices = np.argsort(probabilities)[::-1][:5]  
