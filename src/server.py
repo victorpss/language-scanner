@@ -56,7 +56,7 @@ def root():
 def health():
     return {"ok": True}
 
-@app.post("/predict/")
+@app.post("/predict")
 def predict_language(input_data: TextInput):
     text = input_data.text
     if not text.strip():
