@@ -46,7 +46,7 @@ def ensure_model():
     if not os.path.exists(MODEL_PATH):
         url = f"https://drive.google.com/uc?id={GOOGLE_DRIVE_ID}"
         gdown.download(url, MODEL_PATH, quiet=False)
-    return joblib.load(MODEL_PATH)
+    return joblib.load(MODEL_PATH, mmap_mode="r")
 
 @app.on_event("startup")
 def load_model_on_startup():
